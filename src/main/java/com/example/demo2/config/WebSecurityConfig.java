@@ -33,15 +33,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
                 // 设置UserDetailsService
-                .userDetailsService(this.userDetailsService);
+                .userDetailsService(this.userDetailsService)
                 // 使用BCrypt进行密码的hash
-//                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder());
     }
     // 装载BCrypt密码编码器
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {

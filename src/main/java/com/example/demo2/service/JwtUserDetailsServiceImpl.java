@@ -23,11 +23,11 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<String> list = new ArrayList();
         list.add("ROLE_ADMIN");
-//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         // 加密
-//        String encodedPassword = passwordEncoder.encode("lhq032613".trim());
-//        User user = new User("1","lhq",encodedPassword,"144886137@qq.com",new Date(),list);
-        User user = new User("1","lhq","lhq032613","144886137@qq.com",new Date(),list);
+        String encodedPassword = passwordEncoder.encode("lhq032613".trim());
+        User user = new User("1","lhq",encodedPassword,"144886137@qq.com",new Date(),list);
+//        User user = new User("1","lhq","lhq032613","144886137@qq.com",new Date(),list);
         UserDetails userDetails = JwtUserFactory.create(user);
         return userDetails;
     }
