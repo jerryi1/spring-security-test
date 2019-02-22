@@ -11,26 +11,32 @@ import java.util.*;
  * @create 2019-02-20 15:32
  **/
 public class JwtUser implements UserDetails {
-    private final String id;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
     private final String username;
     private final String password;
-    private final String email;
+//    private final String email;
     private final Collection<? extends GrantedAuthority> authorities;
-    private final Date lastPasswordResetDate;
+//    private final Date lastPasswordResetDate;
 
     public JwtUser(
+            //id 自动生成
             String id,
             String username,
             String password,
-            String email,
-            Collection<? extends GrantedAuthority> authorities,
-            Date lastPasswordResetDate) {
+//            String email,
+            Collection<? extends GrantedAuthority> authorities
+//            Date lastPasswordResetDate
+    ) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.email = email;
+//        this.email = email;
         this.authorities = authorities;
-        this.lastPasswordResetDate = lastPasswordResetDate;
+//        this.lastPasswordResetDate = lastPasswordResetDate;
     }
     //返回分配给用户的角色列表
     @Override
@@ -78,10 +84,10 @@ public class JwtUser implements UserDetails {
         return true;
     }
     // 这个是自定义的，返回上次密码重置日期
-    @JsonIgnore
-    public Date getLastPasswordResetDate() {
-        return lastPasswordResetDate;
-    }
+//    @JsonIgnore
+//    public Date getLastPasswordResetDate() {
+//        return lastPasswordResetDate;
+//    }
 
     @Override
     public String toString() {
@@ -89,9 +95,9 @@ public class JwtUser implements UserDetails {
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
+//                ", email='" + email + '\'' +
                 ", authorities=" + authorities +
-                ", lastPasswordResetDate=" + lastPasswordResetDate +
+//                ", lastPasswordResetDate=" + lastPasswordResetDate +
                 '}';
     }
 }

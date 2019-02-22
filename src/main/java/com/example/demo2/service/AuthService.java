@@ -1,9 +1,9 @@
 package com.example.demo2.service;
 
-import com.example.demo2.bean.User;
+import com.example.demo2.bean.TUserEntity;
 
 public interface AuthService {
-//    User register(User userToAdd);
+    TUserEntity register(TUserEntity userToAdd);
     String login(String username, String password);
-    String refresh(String oldToken);
+//    String refresh(String oldToken);
 }

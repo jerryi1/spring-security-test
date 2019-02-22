@@ -1,8 +1,11 @@
 package com.example.demo2.factory;
 
 import com.example.demo2.bean.JwtUser;
-import com.example.demo2.bean.User;
+
 import java.util.List;
+
+import com.example.demo2.bean.TRoleEntity;
+import com.example.demo2.bean.TUserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -17,14 +20,13 @@ public final class JwtUserFactory {
     private JwtUserFactory() {
     }
 
-    public static JwtUser create(User user) {
+    public static JwtUser create(TUserEntity user) {
         return new JwtUser(
                 user.getId(),
                 user.getUsername(),
                 user.getPassword(),
-                user.getEmail(),
-                mapToGrantedAuthorities(user.getRoles()),
-                user.getLastPasswordResetDate()
+                mapToGrantedAuthorities(user.getRoles().stream().map(TRoleEntity::getName).collect(Collectors.toList()))
+//                user.getLastPasswordResetDate()
         );
     }
 
