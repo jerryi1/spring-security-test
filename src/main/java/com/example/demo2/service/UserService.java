@@ -1,5 +1,6 @@
 package com.example.demo2.service;
 
+import com.example.demo2.bean.TUserEntity;
 import org.springframework.stereotype.Component;
 
 /**
@@ -7,5 +8,19 @@ import org.springframework.stereotype.Component;
  * @create 2019-02-22 13:17
  **/
 public interface UserService {
+    /**
+     * 根据用户名字删除用户信息
+     * */
     Integer deleteUserByname(String name);
+
+    /**
+     * 更新用户信息
+     * */
+    String updateUserInfo(TUserEntity tUserEntity);
+
+    /**
+     * 根据id 查找用户信息
+     * */
+    TUserEntity findUserById(String userId);
+
 }

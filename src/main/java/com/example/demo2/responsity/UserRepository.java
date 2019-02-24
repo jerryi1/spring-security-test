@@ -9,5 +9,6 @@ import com.example.demo2.bean.TUserEntity;
  **/
 public interface UserRepository extends StringBaseRepository<TUserEntity>{
     TUserEntity findByusername(String name);
+    TUserEntity findByid(String userId);
     Integer deleteByusername(String name);
 }

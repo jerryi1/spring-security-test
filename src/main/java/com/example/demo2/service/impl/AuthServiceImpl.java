@@ -1,16 +1,11 @@
 package com.example.demo2.service.impl;
 
-import com.alibaba.druid.util.StringUtils;
 import com.example.demo2.bean.JwtUser;
 import com.example.demo2.bean.TRoleEntity;
 import com.example.demo2.bean.TUserEntity;
-import com.example.demo2.bean.UserRoleEntity;
-import com.example.demo2.constant.RoleEnum;
 import com.example.demo2.responsity.UserRepository;
-import com.example.demo2.responsity.UserRoleRepository;
 import com.example.demo2.service.AuthService;
 import com.example.demo2.utils.JwtTokenUtil;
-import com.querydsl.core.util.CollectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,10 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author lihuaqing
@@ -40,8 +33,6 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserRoleRepository userRoleRepository;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -56,50 +47,75 @@ public class AuthServiceImpl implements AuthService {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    @Override
     /**
+     * 注册改版后的数据
+     * */
+    @Override
+    public TUserEntity register(TUserEntity userToAdd) {
+        // 初始化登记
+        TRoleEntity tRoleEntity = new TRoleEntity();
+        tRoleEntity.setId(1);
+        tRoleEntity.setName("ROLE_NORMAL");
+        Set<TRoleEntity> set = new HashSet();
+        set.add(tRoleEntity);
+        // 格式化密码
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String newpawd =  bCryptPasswordEncoder.encode(userToAdd.getPassword().trim());
+        userToAdd.setPassword(newpawd);
+        userToAdd.setRoles(set);
+        TUserEntity backEntity = userRepository.save(userToAdd);
+        return backEntity;
+    }
+
+    /**
+     * 改版前的数据
      * 这个方法存在事务的问题，如果死在了一半怎么办？
      * */
-    public TUserEntity register(TUserEntity userToAdd) {
-        final String username = userToAdd.getUsername();
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        final String rawPassword = userToAdd.getPassword();
-        userToAdd.setPassword(encoder.encode(rawPassword));
-        /**
-         * 新增用户信息
-         * */
-        TUserEntity tUserEntity = userRepository.save(userToAdd);
-        if (tUserEntity==null){
-           log.info("添加用户失败"+tUserEntity);
-            try {
-                throw new Exception("添加用户失败");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        /**
-         * 添加用户角色的关系表
-         * 默认情况下的初始角色是   ROLE_NORMAL（可以写成静态常量）
-         * */
-        String userid =  tUserEntity.getId();
-        int defaultRoleIndex = RoleEnum.DEFAULT.getIndex();
-        UserRoleEntity userRoleEntity = new UserRoleEntity();
-        userRoleEntity.setUserId(userid);
-        userRoleEntity.setRoleId(defaultRoleIndex);
-        UserRoleEntity backUserRoleEntity= null;
-        try{
-            backUserRoleEntity = userRoleRepository.save(userRoleEntity);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        //添加默认的角色
-        TRoleEntity tRoleEntity = new TRoleEntity();
-        tRoleEntity.setName("ROLR_NORMAL");
-        Set<TRoleEntity> set = new HashSet<>();
-        set.add(tRoleEntity);
-        tUserEntity.setRoles(set);
-        return tUserEntity;
-    }
+//    @Override
+//    public TUserEntity register(TUserEntity userToAdd) {
+//        final String username = userToAdd.getUsername();
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        final String rawPassword = userToAdd.getPassword();
+//        userToAdd.setPassword(encoder.encode(rawPassword));
+//        /**
+//         * 新增用户信息
+//         * */
+//        TUserEntity tUserEntity = userRepository.save(userToAdd);
+//        if (tUserEntity==null){
+//           log.info("添加用户失败"+tUserEntity);
+//            try {
+//                throw new Exception("添加用户失败");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        /**
+//         * 添加用户角色的关系表
+//         * 默认情况下的初始角色是   ROLE_NORMAL（可以写成静态常量）
+//         * */
+//        String userid =  tUserEntity.getId();
+//        int defaultRoleIndex = RoleEnum.DEFAULT.getIndex();
+//        UserRoleEntity userRoleEntity = new UserRoleEntity();
+//        userRoleEntity.setUserId(userid);
+//        userRoleEntity.setRoleId(defaultRoleIndex);
+//        UserRoleEntity backUserRoleEntity= null;
+//        try{
+//            backUserRoleEntity = userRoleRepository.save(userRoleEntity);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        //添加默认的角色
+//        TRoleEntity tRoleEntity = new TRoleEntity();
+//        tRoleEntity.setName("ROLR_NORMAL");
+//        Set<TRoleEntity> set = new HashSet<>();
+//        set.add(tRoleEntity);
+//        tUserEntity.setRoles(set);
+//        return tUserEntity;
+//    }
+
+
+
+
 
     @Override
     public String login(String username, String password) {
