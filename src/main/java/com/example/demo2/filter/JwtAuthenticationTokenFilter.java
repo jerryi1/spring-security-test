@@ -1,8 +1,10 @@
 package com.example.demo2.filter;
 
+import com.example.demo2.constant.RedisConstant;
 import com.example.demo2.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +38,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
+    private RedisTemplate<String,String> redisTemplate;
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
@@ -47,6 +51,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
             logger.info("checking authentication " + username);
+            //验证redis 里面的token 是否存在
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 

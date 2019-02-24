@@ -1,5 +1,6 @@
 package com.example.demo2.service;
 
+import com.example.demo2.archtechture.response.RestResponse;
 import com.example.demo2.bean.TUserEntity;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,6 @@ public interface UserService {
     /**
      * 根据id 查找用户信息
      * */
-    TUserEntity findUserById(String userId);
+    RestResponse findUserById(String userId);
 
 }

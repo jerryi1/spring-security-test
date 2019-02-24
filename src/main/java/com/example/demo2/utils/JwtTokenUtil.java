@@ -1,12 +1,17 @@
 package com.example.demo2.utils;
 
 import com.example.demo2.bean.JwtUser;
+import com.example.demo2.constant.RedisConstant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClock;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +25,7 @@ import java.util.function.Function;
  * @create 2019-02-20 16:10
  **/
 @Component
+@Slf4j
 public class JwtTokenUtil implements Serializable {
 
     static final String CLAIM_KEY_USERNAME = "sub";
@@ -32,6 +38,9 @@ public class JwtTokenUtil implements Serializable {
 
     @Value("${jwt.expiration}")
     private Long expiration;
+
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -57,9 +66,10 @@ public class JwtTokenUtil implements Serializable {
                 .getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(clock.now());
+    private Boolean isTokenExpired(String token, UserDetails userDetails) {
+       String value = redisTemplate.opsForValue().get(RedisConstant.LOGIN_TOKEN_REDIS_KEY+userDetails.getUsername());
+       System.out.println("redis 是否过期------------"+value);
+       return value==null?true:false;
     }
 
     private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
@@ -89,11 +99,11 @@ public class JwtTokenUtil implements Serializable {
                 .compact();
     }
 
-    public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
-        final Date created = getIssuedAtDateFromToken(token);
-        return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
-                && (!isTokenExpired(token) || ignoreTokenExpiration(token));
-    }
+//    public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
+//        final Date created = getIssuedAtDateFromToken(token);
+//        return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
+//                && (!isTokenExpired(token) || ignoreTokenExpiration(token));
+//    }
 
     public String refreshToken(String token) {
         final Date createdDate = clock.now();
@@ -112,11 +122,11 @@ public class JwtTokenUtil implements Serializable {
     public Boolean validateToken(String token, UserDetails userDetails) {
         JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);
-        final Date created = getIssuedAtDateFromToken(token);
+//        final Date created = getIssuedAtDateFromToken(token);
         //final Date expiration = getExpirationDateFromToken(token);
         return (
                 username.equals(user.getUsername())
-                        && !isTokenExpired(token)
+                        && !isTokenExpired(token,userDetails)
         );
     }
 

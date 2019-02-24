@@ -30,8 +30,8 @@ public class TRoleEntity implements Serializable {
     /**
      * 角色对应的关系
      * */
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy="roles")
-    private Set<TUserEntity> users;
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy="roles")
+//    private Set<TUserEntity> users;
 
     @Override
     public boolean equals(Object o) {
@@ -72,11 +72,11 @@ public class TRoleEntity implements Serializable {
         this.description = description;
     }
 
-    public Set<TUserEntity> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<TUserEntity> users) {
-        this.users = users;
-    }
+//    public Set<TUserEntity> getUsers() {
+//        return users;
+//    }
+//
+//    public void setUsers(Set<TUserEntity> users) {
+//        this.users = users;
+//    }
 }

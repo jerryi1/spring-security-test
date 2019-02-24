@@ -1,5 +1,6 @@
 package com.example.demo2.service.impl;
 
+import com.example.demo2.archtechture.response.RestResponse;
 import com.example.demo2.bean.QTUserEntity;
 import com.example.demo2.bean.TUserEntity;
 import com.example.demo2.responsity.UserRepository;
@@ -54,10 +55,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TUserEntity findUserById(String userId) {
+    public RestResponse<TUserEntity> findUserById(String userId) {
         TUserEntity tUserEntity = userRepository.findByid(userId);
         System.out.println(tUserEntity+"查询返回的数据");
-        return tUserEntity;
+        return RestResponse.success(tUserEntity);
     }
 
 }

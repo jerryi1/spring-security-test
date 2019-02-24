@@ -65,7 +65,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST,value = "/finduserByid")
     public RestResponse finduserByid(String userId) {
         System.out.println("查找传入来的参数"+userId);
-        return RestResponse.success(userService.findUserById(userId));
+        return userService.findUserById(userId);
     }
 
 }
