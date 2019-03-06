@@ -30,7 +30,6 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-        ddl-auto: update
   redis:
     host: 127.0.0.1
     port: 6379
@@ -47,8 +46,6 @@ spring:
 #      min-idle: 0
 #      max-idle: 8
 #      max-wait: -1
-
-
 
 
 
