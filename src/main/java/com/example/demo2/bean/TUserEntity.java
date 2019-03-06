@@ -1,5 +1,6 @@
 package com.example.demo2.bean;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -65,6 +66,7 @@ public class TUserEntity implements Serializable {
         this.password = password;
     }
 
+
     public Set<TRoleEntity> getRoles() {
         return roles;
     }
@@ -77,13 +79,23 @@ public class TUserEntity implements Serializable {
     @Column(name = "id")
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    @Excel(name = "ID")
     private String id;
-
+    @Excel(name = "姓名")
     @Column(name = "username")
     private String username;
-
+    @Excel(name = "密码")
     @Column(name = "password")
     private String password;
+
+
+    //返回的图片是不正确的
+//    /**
+//     * 添加图片的url
+//     * */
+//    @Excel(name = "logo图片",type = 2,width = 40,height = 20,imageType = 1)
+//    @Column
+//    private String url;
 
     /**
      * 角色对应的关系
