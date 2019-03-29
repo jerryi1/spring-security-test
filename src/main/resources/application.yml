@@ -31,11 +31,11 @@ spring:
         show_sql: true
         format_sql: true
         ddl-auto: update
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    timeout: 20000
-    password:
+#  redis:
+#    host: 127.0.0.1
+#    port: 6379
+#    timeout: 20000
+#    password:
     #    集群环境打开下面注释，单机不需要打开
     #    cluster:
     #      集群信息

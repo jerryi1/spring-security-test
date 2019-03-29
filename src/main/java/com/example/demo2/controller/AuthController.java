@@ -1,7 +1,6 @@
 package com.example.demo2.controller;
 
 import com.example.demo2.bean.TUserEntity;
-import com.example.demo2.constant.RedisConstant;
 import com.example.demo2.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author lihuaqing
@@ -41,7 +38,7 @@ public class AuthController {
             @RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
         final String token = authService.login(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         //以常量+username 作为key
-        redisTemplate.opsForValue().set(RedisConstant.LOGIN_TOKEN_REDIS_KEY+authenticationRequest.getUsername(),token,RedisConstant.LOGIN_TOKEN_REDIS_EXPIRE_TIME, TimeUnit.SECONDS);
+//        redisTemplate.opsForValue().set(RedisConstant.LOGIN_TOKEN_REDIS_KEY+authenticationRequest.getUsername(),token,RedisConstant.LOGIN_TOKEN_REDIS_EXPIRE_TIME, TimeUnit.SECONDS);
 
         //获取一下认证一下是否成功
 //        String value = redisTemplate.opsForValue().get(RedisConstant.LOGIN_TOKEN_REDIS_KEY);

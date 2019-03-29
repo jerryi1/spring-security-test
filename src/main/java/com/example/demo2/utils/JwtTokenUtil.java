@@ -67,9 +67,10 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Boolean isTokenExpired(String token, UserDetails userDetails) {
-       String value = redisTemplate.opsForValue().get(RedisConstant.LOGIN_TOKEN_REDIS_KEY+userDetails.getUsername());
-       System.out.println("redis 是否过期------------"+value);
-       return value==null?true:false;
+//       String value = redisTemplate.opsForValue().get(RedisConstant.LOGIN_TOKEN_REDIS_KEY+userDetails.getUsername());
+//       System.out.println("redis 是否过期------------"+value);
+//       return value==null?true:false;
+        return false;
     }
 
     private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
